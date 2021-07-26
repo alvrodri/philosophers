@@ -6,7 +6,7 @@
 /*   By: alvrodri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:04:42 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/07/23 19:13:56 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/07/26 12:52:02 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	ft_error(int printf)
 {
 	(void)printf;
+	exit(1);
 	return (1);
 }
 
@@ -90,46 +91,40 @@ void	print_message(char *msg, t_philosopher *philosopher)
 	printf("%lu %d %s\n", get_time_diff(philosopher->data->start_time, time), philosopher->index, msg);
 }
 
+t_fork	*get_fork(t_philosopher *philosopher, int dir)
+{
+	if (dir == 0)
+		return (philosopher->data->forks[philosopher->index - 1]);
+	else if (dir == 1)
+	{
+		if (philosopher->index == philosopher->data->n)
+			return (philosopher->data->forks[0]);
+		else
+			return (philosopher->data->forks[philosopher->index]);
+	}
+	return (NULL);
+}
+
 void	grab_fork(t_philosopher *philosopher, int dir)
 {
 	t_fork	*fork;
 
-	fork = NULL;
-	if (dir == 0)
-		fork = philosopher->data->forks[philosopher->index - 1];
-	else if (dir == 1)
-	{
-		if (philosopher->index == philosopher->data->n)
-			fork = philosopher->data->forks[0];
-		else
-			fork = philosopher->data->forks[philosopher->index];
-	}
+	fork = get_fork(philosopher, dir);
 	if (fork == NULL || fork->in_use)
 		return ;
 	pthread_mutex_lock(&fork->mutex);
 	fork->in_use = 1;
 	philosopher->forks++;
 	print_message("has taken a fork", philosopher);
-	pthread_mutex_unlock(&fork->mutex);
 }
 
 void	release_fork(t_philosopher *philosopher, int dir)
 {
 	t_fork	*fork;
 
-	fork = NULL;
-	if (dir == 0)
-		fork = philosopher->data->forks[philosopher->index - 1];
-	else if (dir == 1)
-	{
-		if (philosopher->index == philosopher->data->n)
-			fork = philosopher->data->forks[0];
-		else
-			fork = philosopher->data->forks[philosopher->index];
-	}
+	fork = get_fork(philosopher, dir);
 	if (fork == NULL)
 		return ;
-	pthread_mutex_lock(&fork->mutex);
 	fork->in_use = 0;
 	philosopher->forks = 0;
 	pthread_mutex_unlock(&fork->mutex);
@@ -145,18 +140,23 @@ void	start_philosopher(void *args)
 	{
 		if (philosopher->state == THINKING)
 		{
-			grab_fork(philosopher, 0);
-			grab_fork(philosopher, 1);
+			if (get_fork(philosopher, 0)->in_use || get_fork(philosopher, 1)->in_use)
+				;
+			else
+			{
+				grab_fork(philosopher, 0);
+				grab_fork(philosopher, 1);
+			}
 			if (philosopher->forks == 2)
 			{
 				print_message("is eating", philosopher);
 				philosopher->state = EATING;
 				usleep(philosopher->data->time_to_eat * 1000);
+				gettimeofday(&time, NULL);
+				philosopher->last_eat = time;
 				philosopher->forks -= 2;
 				release_fork(philosopher, 0);
 				release_fork(philosopher, 1);
-				gettimeofday(&time, NULL);
-				philosopher->last_eat = time;
 				philosopher->state = SLEEPING;
 				print_message("is sleeping", philosopher);
 				usleep(philosopher->data->time_to_sleep * 1000);
@@ -164,7 +164,7 @@ void	start_philosopher(void *args)
 				print_message("is thinking", philosopher);
 			}
 		}
-		usleep(1000);
+		//usleep(1000);
 	}
 }
 
@@ -187,7 +187,7 @@ void	check_death(t_data *data)
 			}
 			i++;
 		}
-		usleep(1000);
+	//	usleep(1000);
 	}
 }
 
@@ -212,7 +212,7 @@ void	start_philosophers(t_data *data)
 	{
 		data->philosophers[i] = (t_philosopher *)malloc(sizeof(t_philosopher));
 		if (!data->philosophers[i])
-			exit(ft_error(printf("Could not allocate enought memory.\n")));
+			exit(ft_error(printf("Could not allocate enough memory.\n")));
 		pthread_mutex_init(&(data->forks[i]->mutex), NULL);
 		data->philosophers[i]->index = i + 1;
 		data->philosophers[i]->state = THINKING;
@@ -223,7 +223,7 @@ void	start_philosophers(t_data *data)
 		gettimeofday(&time, NULL);
 		data->philosophers[i]->last_eat = time;
 		pthread_create(&data->philosophers[i]->pid, NULL, (void *)start_philosopher, data->philosophers[i]);
-		usleep(5000);
+		usleep(1000);
 		i++;
 	}
 	pthread_create(&data->death_pid, NULL, (void *)check_death, data);
@@ -233,6 +233,7 @@ void	start_philosophers(t_data *data)
 		pthread_join(data->philosophers[i]->pid, NULL);
 		i++;
 	}
+	pthread_join(data->death_pid, NULL);
 }
 
 int	main(int argc, char **argv)
