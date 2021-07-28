@@ -6,7 +6,7 @@
 /*   By: alvrodri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:04:42 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/07/26 12:52:02 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/07/28 11:28:13 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,54 +140,35 @@ void	start_philosopher(void *args)
 	{
 		if (philosopher->state == THINKING)
 		{
-			if (get_fork(philosopher, 0)->in_use || get_fork(philosopher, 1)->in_use)
-				;
-			else
-			{
-				grab_fork(philosopher, 0);
-				grab_fork(philosopher, 1);
-			}
+			grab_fork(philosopher, 0);
+			grab_fork(philosopher, 1);
 			if (philosopher->forks == 2)
-			{
-				print_message("is eating", philosopher);
 				philosopher->state = EATING;
-				usleep(philosopher->data->time_to_eat * 1000);
-				gettimeofday(&time, NULL);
-				philosopher->last_eat = time;
-				philosopher->forks -= 2;
-				release_fork(philosopher, 0);
-				release_fork(philosopher, 1);
-				philosopher->state = SLEEPING;
-				print_message("is sleeping", philosopher);
-				usleep(philosopher->data->time_to_sleep * 1000);
-				philosopher->state = THINKING;
-				print_message("is thinking", philosopher);
-			}
 		}
-		//usleep(1000);
-	}
-}
-
-void	check_death(t_data *data)
-{
-	t_philosopher	*philosopher;
-	int				i;
-
-	while (1)
-	{
-		i = 0;
-		while (i < data->n)
+		else if (philosopher->state == EATING)
 		{
-			philosopher = data->philosophers[i];
-			if (get_time(NULL) - get_time(&philosopher->last_eat) > data->time_to_die)
-			{
-				philosopher->alive = 0;
-				print_message("died", philosopher);
-				exit(0);
-			}
-			i++;
+			gettimeofday(&time, NULL);
+			philosopher->last_eat = time;
+			print_message("is eating", philosopher);
+			usleep(philosopher->data->time_to_eat * 1000);
+			philosopher->forks -= 2;
+			release_fork(philosopher, 0);
+			release_fork(philosopher, 1);
+			philosopher->state = SLEEPING;
 		}
-	//	usleep(1000);
+		else if (philosopher->state == SLEEPING)
+		{
+			print_message("is sleeping", philosopher);
+			usleep(philosopher->data->time_to_sleep * 1000);
+			philosopher->state = THINKING;
+			print_message("is thinking", philosopher);
+		}
+		if (get_time(NULL) - get_time(&philosopher->last_eat) > philosopher->data->time_to_die)
+		{
+			philosopher->alive = 0;
+			print_message("died", philosopher);
+			exit(0);
+		}
 	}
 }
 
@@ -223,7 +204,8 @@ void	start_philosophers(t_data *data)
 		gettimeofday(&time, NULL);
 		data->philosophers[i]->last_eat = time;
 		pthread_create(&data->philosophers[i]->pid, NULL, (void *)start_philosopher, data->philosophers[i]);
-		usleep(1000);
+		if ((i + 1) % 2 == 0)
+			usleep(1000);
 		i++;
 	}
 	pthread_create(&data->death_pid, NULL, (void *)check_death, data);
@@ -246,6 +228,5 @@ int	main(int argc, char **argv)
 		return (ft_error(printf("Usage: %s <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [num_eat]\n", argv[0])));
 	set_data(++argv, --argc, &data);
 	start_philosophers(&data);
-	check_death(&data);
 	return (0);
 }
