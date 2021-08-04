@@ -1,5 +1,10 @@
 NAME	= philo
-SRCS	= ./srcs/philosophers.c
+SRCS	= ./srcs/philosophers.c \
+		  ./srcs/actions/actions.c \
+		  ./srcs/forks/forks.c \
+		  ./srcs/print/print.c \
+		  ./srcs/time/time.c \
+		  ./srcs/util/util.c
 HEADERS	= ./includes/philosophers.h
 OBJS	= $(SRCS:.c=.o)
 

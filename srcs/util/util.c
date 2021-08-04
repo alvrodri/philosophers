@@ -1,0 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   util.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/04 16:42:44 by alvrodri          #+#    #+#             */
+/*   Updated: 2021/08/04 19:00:28 by alvrodri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/philosophers.h"
+
+int	ft_error(int printf)
+{
+	(void)printf;
+	exit(1);
+	return (1);
+}
+
+unsigned long	ft_abs(long n)
+{
+	if (n < 0)
+		return (-n);
+	return (n);
+}
+
+unsigned long	ft_atoul(char *str)
+{
+	int	i;
+	unsigned long	num;
+
+	i = 0;
+	num = 0;
+	while (str[i])
+	{
+		if ((num * 10 + (str[i] - 48)) > 0xffffffff
+			|| !(str[i] >= '0' && str[i] <= '9'))
+			return (ft_error(printf("ft_atoul didn't work.\n")));
+		num = num * 10 + (str[i] - 48);
+		i++;
+	}
+	return (num);
+}

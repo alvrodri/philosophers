@@ -6,3 +6,4 @@ a.out
 *.dSYM
 *.a
 philo
+.vscode
