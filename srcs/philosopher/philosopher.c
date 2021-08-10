@@ -6,13 +6,13 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/10 11:46:01 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/10 18:06:38 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/08/10 18:31:47 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philosophers.h"
 
-t_philosopher	*create_philo(t_data *data, int i)
+t_philosopher	*philo_create(t_data *data, int i)
 {
 	t_philosopher	*philo;
 
@@ -28,11 +28,11 @@ t_philosopher	*create_philo(t_data *data, int i)
 	philo->left_fork = NULL;
 	philo->right_fork = NULL;
 	philo->last_eat = philo->time;
-	pthread_create(&philo->pid, NULL, start_philosopher, philo);
+	pthread_create(&philo->pid, NULL, philo_start, philo);
 	return (philo);
 }
 
-void	*start_philosopher(void *args)
+void	*philo_start(void *args)
 {
 	t_philosopher	*philosopher;
 
@@ -46,12 +46,12 @@ void	*start_philosopher(void *args)
 		else if (philosopher->state == SLEEPING)
 			philo_sleep(philosopher);
 	}
-	release_fork(philosopher, 0);
-	release_fork(philosopher, 1);
+	fork_release(philosopher, 0);
+	fork_release(philosopher, 1);
 	return (NULL);
 }
 
-void	start_philosophers(t_data *data)
+void	philos_init(t_data *data)
 {
 	int	i;
 
@@ -62,7 +62,7 @@ void	start_philosophers(t_data *data)
 		exit(ft_error(printf("Could not allocate enough memory.\n")));
 	while (i < data->n)
 	{
-		data->philosophers[i] = create_philo(data, i);
+		data->philosophers[i] = philo_create(data, i);
 		usleep(50);
 		i++;
 	}

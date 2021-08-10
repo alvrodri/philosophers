@@ -6,13 +6,13 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:26:45 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/05 13:44:55 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/08/10 18:31:01 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philosophers.h"
 
-pthread_mutex_t	*get_fork(t_philosopher *philosopher, int dir)
+pthread_mutex_t	*fork_get(t_philosopher *philosopher, int dir)
 {
 	if (dir == 0)
 	{
@@ -26,14 +26,14 @@ pthread_mutex_t	*get_fork(t_philosopher *philosopher, int dir)
 	return (NULL);
 }
 
-void	grab_fork(t_philosopher *philosopher, int dir)
+void	fork_grab(t_philosopher *philosopher, int dir)
 {
 	pthread_mutex_t	*fork;
 
-	fork = get_fork(philosopher, dir);
+	fork = fork_get(philosopher, dir);
 	if (fork == NULL)
 		return ;
-	if (dir == 0 && get_fork(philosopher, 1) == get_fork(philosopher, 0))
+	if (dir == 0 && fork_get(philosopher, 1) == fork_get(philosopher, 0))
 		return ;
 	pthread_mutex_lock(fork);
 	if (dir == 0)
@@ -43,11 +43,11 @@ void	grab_fork(t_philosopher *philosopher, int dir)
 	print_message(philosopher, NULL, "has taken a fork");
 }
 
-void	release_fork(t_philosopher *philosopher, int dir)
+void	fork_release(t_philosopher *philosopher, int dir)
 {
 	pthread_mutex_t	*fork;
 
-	fork = get_fork(philosopher, dir);
+	fork = fork_get(philosopher, dir);
 	if (fork == NULL)
 		return ;
 	if (dir == 0)
@@ -57,7 +57,7 @@ void	release_fork(t_philosopher *philosopher, int dir)
 	pthread_mutex_unlock(fork);
 }
 
-int	init_forks(t_data *data)
+int	forks_init(t_data *data)
 {
 	int	i;
 

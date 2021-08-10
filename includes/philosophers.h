@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:05:27 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/10 18:05:34 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/08/10 18:29:11 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +61,19 @@ typedef struct s_data
 
 int				main(int argc, char **argv);
 
-t_philosopher	*create_philo(t_data *data, int i);
-void			*start_philosopher(void *args);
-void			start_philosophers(t_data *data);
+t_philosopher	*philo_create(t_data *data, int i);
+void			*philo_start(void *args);
+void			philos_init(t_data *data);
 int				philo_eaten(t_data *data);
 
 void			philo_think(t_philosopher *pphilosopher);
 void			philo_eat(t_philosopher *philosopher);
 void			philo_sleep(t_philosopher *philosopher);
 
-int				init_forks(t_data *data);
-pthread_mutex_t	*get_fork(t_philosopher *philosopher, int dir);
-void			grab_fork(t_philosopher *philosopher, int dir);
-void			release_fork(t_philosopher *philosopher, int dir);
+int				forks_init(t_data *data);
+pthread_mutex_t	*fork_get(t_philosopher *philosopher, int dir);
+void			fork_grab(t_philosopher *philosopher, int dir);
+void			fork_release(t_philosopher *philosopher, int dir);
 
 void			print_message(t_philosopher *philosopher,
 					t_data *data, char *str);

@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:04:42 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/10 18:08:58 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/08/10 18:30:44 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	set_data(char **argv, int argc, t_data *data)
 	data->start_time = time;
 	data->end = 0;
 	pthread_mutex_init(&data->print_mutex, NULL);
-	if (!init_forks(data))
+	if (!forks_init(data))
 		exit(ft_error(printf("%s: Could not initialize forks.\n", argv[-1])));
 }
 
@@ -95,7 +95,7 @@ int	main(int argc, char **argv)
 		return (ft_error(printf("Usage: %s <number_of_philosophers> <time_to_die> <time_to_eat> \
 <time_to_sleep> [num_eat]\n", argv[0])));
 	set_data(++argv, --argc, &data);
-	start_philosophers(&data);
+	philos_init(&data);
 	check_death(&data);
 	return (0);
 }
