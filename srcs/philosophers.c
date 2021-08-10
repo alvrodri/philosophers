@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:04:42 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/10 19:10:54 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/08/10 19:17:23 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void	set_data(char **argv, int argc, t_data *data)
 	struct timeval	time;
 
 	data->n = ft_atoul(argv[0]);
+	if (data->n == 0)
+		ft_error(printf("%s: You need at least one philosopher.\n", argv[-1]));
 	data->time_to_die = ft_atoul(argv[1]);
 	data->time_to_eat = ft_atoul(argv[2]);
 	data->time_to_sleep = ft_atoul(argv[3]);
