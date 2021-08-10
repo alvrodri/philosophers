@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:04:42 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/10 18:30:44 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/08/10 19:10:54 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	check_death(t_data *data)
 		{
 			gettimeofday(&time, NULL);
 			if (get_time_diff(time, data->philosophers[i]->last_eat)
-				>= (data->time_to_die + 5))
+				>= (data->time_to_die))
 			{
 				print_message(data->philosophers[i], NULL, "died 💀");
 				data->philosophers[i]->alive = 0;
