@@ -4,7 +4,8 @@ SRCS	= ./srcs/philosophers.c \
 		  ./srcs/forks/forks.c \
 		  ./srcs/print/print.c \
 		  ./srcs/time/time.c \
-		  ./srcs/util/util.c
+		  ./srcs/util/util.c \
+		  ./srcs/philosopher/philosopher.c
 HEADERS	= ./includes/philosophers.h
 OBJS	= $(SRCS:.c=.o)
 
@@ -12,7 +13,7 @@ CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror -fsanitize=address -g
 
 $(NAME): $(OBJS) $(HEADERS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) -I $(HEADERS) $(OBJS) -o $(NAME)
 
 all:	$(NAME)
 
@@ -23,3 +24,5 @@ fclean:	clean
 	rm -rf $(NAME)
 
 re:	fclean all
+
+.PHONY: all clean fclean re

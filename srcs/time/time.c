@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:38:36 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/04 19:59:05 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/08/10 12:41:50 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 unsigned long	get_time_diff(struct timeval first, struct timeval second)
 {
-	unsigned long start;
-	unsigned long end;
+	unsigned long	start;
+	unsigned long	end;
 
-	start = first.tv_sec * 1000000 + first.tv_usec;
-	end = second.tv_sec * 1000000 + second.tv_usec;
+	start = first.tv_sec * 1000 + first.tv_usec / 1000;
+	end = second.tv_sec * 1000 + second.tv_usec / 1000;
 	return (ft_abs(start - end));
 }
 
 unsigned long	get_time(struct timeval *time)
 {
-	struct timeval tmp;
+	struct timeval	tmp;
 
 	if (time == NULL)
 	{
@@ -38,9 +38,11 @@ unsigned long	get_time(struct timeval *time)
 void	ft_usleep(long millis)
 {
 	struct timeval	time;
+	struct timeval	finish;
 
 	gettimeofday(&time, NULL);
 	while (get_time(NULL) != get_time(&time) + millis)
 		usleep(50);
+	gettimeofday(&finish, NULL);
 	return ;
 }

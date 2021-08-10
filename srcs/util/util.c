@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:42:44 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/04 19:00:28 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/08/05 13:31:11 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ unsigned long	ft_abs(long n)
 
 unsigned long	ft_atoul(char *str)
 {
-	int	i;
+	int				i;
 	unsigned long	num;
 
 	i = 0;
