@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:04:42 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/10 12:31:17 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/08/10 18:08:58 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	join_threads(t_data *data)
 
 void	set_data(char **argv, int argc, t_data *data)
 {
-	struct timeval time;
+	struct timeval	time;
 
 	data->n = ft_atoul(argv[0]);
 	data->time_to_die = ft_atoul(argv[1]);
@@ -54,18 +54,17 @@ void	set_data(char **argv, int argc, t_data *data)
 
 void	check_death(t_data *data)
 {
-	struct timeval time;
-	int	i;
-	int	eaten;
+	struct timeval	time;
+	int				i;
 
 	while (!data->end)
 	{
 		i = 0;
-		eaten = 0;
 		while (i < data->n)
 		{
 			gettimeofday(&time, NULL);
-			if (get_time_diff(time, data->philosophers[i]->last_eat) >= (data->time_to_die + 10) * 1000)
+			if (get_time_diff(time, data->philosophers[i]->last_eat)
+				>= (data->time_to_die + 5))
 			{
 				print_message(data->philosophers[i], NULL, "died 💀");
 				data->philosophers[i]->alive = 0;
@@ -78,10 +77,11 @@ void	check_death(t_data *data)
 		if (philo_eaten(data))
 		{
 			if (data->all_alive)
-				print_message(NULL, data, "💥  All the philosophers have eaten! 💥");
-			data->end = 1;
+				print_message(NULL, data,
+					"💥  All the philosophers have eaten! 💥");
 			break ;
 		}
+		ft_msleep(1);
 	}
 	data->end = 1;
 	join_threads(data);
@@ -89,12 +89,11 @@ void	check_death(t_data *data)
 
 int	main(int argc, char **argv)
 {
-	(void)argc;
-	(void)argv;
 	t_data	data;
 
 	if (argc > 6 || argc < 5)
-		return (ft_error(printf("Usage: %s <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [num_eat]\n", argv[0])));
+		return (ft_error(printf("Usage: %s <number_of_philosophers> <time_to_die> <time_to_eat> \
+<time_to_sleep> [num_eat]\n", argv[0])));
 	set_data(++argv, --argc, &data);
 	start_philosophers(&data);
 	check_death(&data);

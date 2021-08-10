@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:05:27 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/10 12:24:56 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/08/10 18:05:34 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,11 @@ pthread_mutex_t	*get_fork(t_philosopher *philosopher, int dir);
 void			grab_fork(t_philosopher *philosopher, int dir);
 void			release_fork(t_philosopher *philosopher, int dir);
 
-void			print_message(t_philosopher *philosopher, t_data *data, char *str);
+void			print_message(t_philosopher *philosopher,
+					t_data *data, char *str);
 
 void			ft_usleep(long millis);
+void			ft_msleep(long millis);
 unsigned long	get_time(struct timeval *time);
 unsigned long	get_time_diff(struct timeval first, struct timeval second);
 

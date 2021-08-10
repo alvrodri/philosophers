@@ -6,15 +6,15 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/10 11:46:01 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/10 12:40:09 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/08/10 18:06:38 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philosophers.h"
 
-t_philosopher   *create_philo(t_data *data, int i)
+t_philosopher	*create_philo(t_data *data, int i)
 {
-	t_philosopher   *philo;
+	t_philosopher	*philo;
 
 	philo = (t_philosopher *)malloc(sizeof(t_philosopher));
 	if (!philo)
@@ -56,13 +56,14 @@ void	start_philosophers(t_data *data)
 	int	i;
 
 	i = 0;
-	data->philosophers = (t_philosopher **)malloc(sizeof(t_philosopher *) * data->n);
+	data->philosophers = (t_philosopher **)malloc(sizeof(t_philosopher *)
+			* data->n);
 	if (!data->philosophers)
 		exit(ft_error(printf("Could not allocate enough memory.\n")));
 	while (i < data->n)
 	{
 		data->philosophers[i] = create_philo(data, i);
-		usleep(10);
+		usleep(50);
 		i++;
 	}
 }

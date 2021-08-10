@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:09:48 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/10 12:42:06 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/08/10 12:51:07 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,7 @@ void	philo_eat(t_philosopher *philosopher)
 	gettimeofday(&philosopher->time, NULL);
 	philosopher->last_eat = philosopher->time;
 	print_message(philosopher, NULL, "is eating 🍜");
-	while (get_time_diff(philosopher->time, philosopher->last_eat)
-			< (philosopher->data->time_to_eat))
-	{
-		gettimeofday(&philosopher->time, NULL);
-		usleep(1);
-	}
+	ft_msleep(philosopher->data->time_to_eat);
 	philosopher->eaten++;
 	release_fork(philosopher, 0);
 	release_fork(philosopher, 1);
@@ -53,12 +48,7 @@ void	philo_sleep(t_philosopher *philosopher)
 {
 	gettimeofday(&philosopher->last_sleep, NULL);
 	print_message(philosopher, NULL, "is sleeping 🛌");
-	while (get_time_diff(philosopher->time, philosopher->last_sleep)
-			< (philosopher->data->time_to_sleep))
-	{
-		gettimeofday(&philosopher->time, NULL);
-		usleep(1);
-	}
+	ft_msleep(philosopher->data->time_to_sleep);
 	philosopher->state = THINKING;
 	print_message(philosopher, NULL, "is thinking 🎓");
 }
