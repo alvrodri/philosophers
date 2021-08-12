@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/10 11:46:01 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/10 19:15:48 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/08/12 15:05:48 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,14 @@ void	*philo_start(void *args)
 	philosopher = (t_philosopher *)args;
 	while (!philosopher->data->end)
 	{
-		if (philosopher->eaten == philosopher->data->must_eat)
-			break ;
 		if (philosopher->state == THINKING)
 			philo_think(philosopher);
 		else if (philosopher->state == EATING)
 			philo_eat(philosopher);
 		else if (philosopher->state == SLEEPING)
 			philo_sleep(philosopher);
+		if (philosopher->eaten == philosopher->data->must_eat)
+			break ;
 	}
 	fork_release(philosopher, 0);
 	fork_release(philosopher, 1);
