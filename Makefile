@@ -10,7 +10,7 @@ HEADERS	= ./includes/philosophers.h
 OBJS	= $(SRCS:.c=.o)
 
 CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror -fsanitize=address -g
+CFLAGS	= -Wall -Wextra -Werror
 
 $(NAME): $(OBJS) $(HEADERS)
 	$(CC) $(CFLAGS) -I $(HEADERS) $(OBJS) -o $(NAME)

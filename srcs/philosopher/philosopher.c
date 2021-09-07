@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/10 11:46:01 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/12 15:05:48 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/09/07 10:27:45 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,20 @@ t_philosopher	*philo_create(t_data *data, int i)
 
 	philo = (t_philosopher *)malloc(sizeof(t_philosopher));
 	if (!philo)
-		exit(ft_error(printf("Could not allocate enough memory.\n")));
+	{
+		ft_error(printf("Could not allocate enough memory.\n"));
+		return (NULL);
+	}
 	gettimeofday(&philo->time, NULL);
 	philo->index = i;
 	philo->state = THINKING;
 	philo->data = data;
 	philo->eaten = 0;
 	philo->alive = 1;
-	philo->left_fork = NULL;
-	philo->right_fork = NULL;
 	philo->last_eat = philo->time;
+	philo->left_fork = &data->forks[philo->index];
+	philo->right_fork = &data->forks[philo->index + 1 % data->n];
+	philo->odd_even = philo->index % 2;
 	pthread_create(&philo->pid, NULL, philo_start, philo);
 	return (philo);
 }
@@ -53,7 +57,7 @@ void	*philo_start(void *args)
 	return (NULL);
 }
 
-void	philos_init(t_data *data)
+int	philos_init(t_data *data)
 {
 	int	i;
 
@@ -61,13 +65,16 @@ void	philos_init(t_data *data)
 	data->philosophers = (t_philosopher **)malloc(sizeof(t_philosopher *)
 			* data->n);
 	if (!data->philosophers)
-		exit(ft_error(printf("Could not allocate enough memory.\n")));
+		return (ft_error(printf("Could not allocate enough memory.\n")));
 	while (i < data->n)
 	{
 		data->philosophers[i] = philo_create(data, i);
+		if (data->philosophers[i] == NULL)
+			return (1);
 		usleep(50);
 		i++;
 	}
+	return (0);
 }
 
 int	philo_eaten(t_data *data)

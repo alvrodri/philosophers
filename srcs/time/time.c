@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:38:36 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/12 15:03:23 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/09/07 10:26:56 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,6 @@ unsigned long	get_time(struct timeval *time)
 		return ((time->tv_sec * 1000) + (time->tv_usec / 1000));
 }
 
-void	ft_usleep(long millis)
-{
-	struct timeval	time;
-	struct timeval	finish;
-
-	gettimeofday(&time, NULL);
-	while (get_time(NULL) != get_time(&time) + millis)
-		usleep(50);
-	gettimeofday(&finish, NULL);
-	return ;
-}
-
 void	ft_msleep(long millis)
 {
 	struct timeval	time;
@@ -57,6 +45,6 @@ void	ft_msleep(long millis)
 	while (get_time_diff(time, time_a) < (unsigned long)millis)
 	{
 		gettimeofday(&time_a, NULL);
-		usleep(50);
+		usleep(200);
 	}
 }

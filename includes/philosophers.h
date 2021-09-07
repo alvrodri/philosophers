@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:05:27 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/08/10 18:29:11 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/09/07 10:27:17 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_philosopher
 	int				index;
 	int				eaten;
 	int				alive;
+	int				odd_even;
 	struct timeval	time;
 	struct timeval	last_eat;
 	struct timeval	last_sleep;
@@ -49,9 +50,9 @@ typedef struct s_data
 	int						n;
 	int						must_eat;
 	struct timeval			start_time;
-	unsigned long			time_to_die;
-	unsigned long			time_to_eat;
-	unsigned long			time_to_sleep;
+	long					time_to_die;
+	long					time_to_eat;
+	long					time_to_sleep;
 	int						end;
 	int						all_alive;
 	pthread_mutex_t			print_mutex;
@@ -63,7 +64,7 @@ int				main(int argc, char **argv);
 
 t_philosopher	*philo_create(t_data *data, int i);
 void			*philo_start(void *args);
-void			philos_init(t_data *data);
+int				philos_init(t_data *data);
 int				philo_eaten(t_data *data);
 
 void			philo_think(t_philosopher *pphilosopher);
@@ -85,6 +86,6 @@ unsigned long	get_time_diff(struct timeval first, struct timeval second);
 
 int				ft_error(int error);
 unsigned long	ft_abs(long n);
-unsigned long	ft_atoul(char *str);
+long			ft_atoul(char *str);
 
 #endif
