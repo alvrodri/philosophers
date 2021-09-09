@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:04:42 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/09/07 10:29:56 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/09/09 12:06:43 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,14 @@ void	check_death(t_data *data)
 		i = 0;
 		while (i < data->n)
 		{
+			if (data->philosophers[i]->eaten == data->must_eat)
+			{
+				i++;
+				continue ;
+			}
 			gettimeofday(&time, NULL);
 			if (get_time_diff(time, data->philosophers[i]->last_eat)
-				>= (unsigned long)(data->time_to_die))
+				> (unsigned long)(data->time_to_die))
 			{
 				print_message(data->philosophers[i], NULL, "died 💀");
 				data->philosophers[i]->alive = 0;
@@ -92,7 +97,6 @@ void	check_death(t_data *data)
 			i++;
 		}
 		check_eaten(data);
-		ft_msleep(5);
 	}
 	data->end = 1;
 	join_threads(data);

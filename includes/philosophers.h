@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:05:27 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/09/07 10:27:17 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/09/09 11:50:27 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_philosopher
 	int				index;
 	int				eaten;
 	int				alive;
-	int				odd_even;
+	int				even;
 	struct timeval	time;
 	struct timeval	last_eat;
 	struct timeval	last_sleep;

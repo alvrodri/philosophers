@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/10 11:46:01 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/09/07 10:27:45 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/09/09 11:51:02 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,8 @@ t_philosopher	*philo_create(t_data *data, int i)
 	philo->alive = 1;
 	philo->last_eat = philo->time;
 	philo->left_fork = &data->forks[philo->index];
-	philo->right_fork = &data->forks[philo->index + 1 % data->n];
-	philo->odd_even = philo->index % 2;
-	pthread_create(&philo->pid, NULL, philo_start, philo);
+	philo->right_fork = &data->forks[(philo->index + 1) % data->n];
+	philo->even = philo->index % 2 == 0;
 	return (philo);
 }
 
@@ -45,9 +44,9 @@ void	*philo_start(void *args)
 	{
 		if (philosopher->state == THINKING)
 			philo_think(philosopher);
-		else if (philosopher->state == EATING)
+		if (philosopher->state == EATING)
 			philo_eat(philosopher);
-		else if (philosopher->state == SLEEPING)
+		if (philosopher->state == SLEEPING)
 			philo_sleep(philosopher);
 		if (philosopher->eaten == philosopher->data->must_eat)
 			break ;
@@ -71,7 +70,12 @@ int	philos_init(t_data *data)
 		data->philosophers[i] = philo_create(data, i);
 		if (data->philosophers[i] == NULL)
 			return (1);
-		usleep(50);
+		i++;
+	}
+	i = 0;
+	while (i < data->n)
+	{
+		pthread_create(&data->philosophers[i]->pid, NULL, philo_start, data->philosophers[i]);
 		i++;
 	}
 	return (0);
