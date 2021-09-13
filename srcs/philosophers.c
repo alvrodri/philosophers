@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 18:04:42 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/09/09 12:06:43 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/09/13 12:57:01 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,45 +58,46 @@ int	set_data(char **argv, int argc, t_data *data)
 	return (0);
 }
 
-void	check_eaten(t_data *data)
+void	while_philos(t_data *data, int i)
 {
-	if (philo_eaten(data))
+	struct timeval	time;
+
+	while (i < data->n)
 	{
-		if (data->all_alive)
-			print_message(NULL, data,
-				"💥  All the philosophers have eaten! 💥");
-		data->end = 1;
+		if (data->philosophers[i]->eaten == data->must_eat)
+		{
+			i++;
+			continue ;
+		}
+		gettimeofday(&time, NULL);
+		if (get_time_diff(time, data->philosophers[i]->last_eat)
+			> (unsigned long)(data->time_to_die))
+		{
+			print_message(data->philosophers[i], NULL, "died 💀");
+			data->philosophers[i]->alive = 0;
+			data->all_alive = 0;
+			data->end = 1;
+			break ;
+		}
+		i++;
 	}
 }
 
 void	check_death(t_data *data)
 {
-	struct timeval	time;
 	int				i;
 
 	while (!data->end)
 	{
 		i = 0;
-		while (i < data->n)
+		while_philos(data, i);
+		if (philo_eaten(data))
 		{
-			if (data->philosophers[i]->eaten == data->must_eat)
-			{
-				i++;
-				continue ;
-			}
-			gettimeofday(&time, NULL);
-			if (get_time_diff(time, data->philosophers[i]->last_eat)
-				> (unsigned long)(data->time_to_die))
-			{
-				print_message(data->philosophers[i], NULL, "died 💀");
-				data->philosophers[i]->alive = 0;
-				data->all_alive = 0;
-				data->end = 1;
-				break ;
-			}
-			i++;
+			if (data->all_alive)
+				print_message(NULL, data,
+					"💥  All the philosophers have eaten! 💥");
+			data->end = 1;
 		}
-		check_eaten(data);
 	}
 	data->end = 1;
 	join_threads(data);

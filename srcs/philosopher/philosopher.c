@@ -6,7 +6,7 @@
 /*   By: alvrodri <alvrodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/10 11:46:01 by alvrodri          #+#    #+#             */
-/*   Updated: 2021/09/09 11:51:02 by alvrodri         ###   ########.fr       */
+/*   Updated: 2021/09/13 12:52:23 by alvrodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ int	philos_init(t_data *data)
 	i = 0;
 	while (i < data->n)
 	{
-		pthread_create(&data->philosophers[i]->pid, NULL, philo_start, data->philosophers[i]);
+		pthread_create(&data->philosophers[i]->pid, NULL,
+			philo_start, data->philosophers[i]);
 		i++;
 	}
 	return (0);
